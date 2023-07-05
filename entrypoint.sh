@@ -101,9 +101,11 @@ api() {
     echo >&2 "api failed:"
     echo >&2 "path: $path"
     echo >&2 "response: $response"
+    jqmsg=`echo $response|jq '.message'`
+    echo >&2 "reposnse msg: $jqmsg"
     if [[ "$response" == *'"Server Error"'* ]]; then
       echo "Server error - trying again"
-    elif [[ "$response" == *'"Bad credentials"'* ]]; then
+    elif [[ "$jqmsg" == "\"Bad credentials\"" ]]; then
       echo "credentials error - trying again"
     else
       exit 1
